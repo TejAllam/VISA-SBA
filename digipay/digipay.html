@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <title>DigiPay - Merchant Screen</title>
+  </head>
+  <body>
+
+    <style>
+      .card-img-top{
+        width: 40% !important; 
+      }
+    </style>
+
+    <script>
+          
+          // Individual item JSON
+          const apple = { "product": "apple", "price": 5 };
+          const orange = { "product": "orange", "price": 5 };
+          const lemon = { "product": "lemon", "price": 5 };
+          const lettuce = { "product": "lettuce", "price": 5 };
+
+          // Final Order JSON
+          var order = { "phone": "", "items": [], "balance": "100" };
+
+        $(function() {
+
+          var item = {"product": "", "price": ""};
+
+          $( "#add-apple"  ).click(function() { order.items.push(apple  ); console.log( "Apple Added"  ); console.log("Updated order : ", order); }); 
+          $( "#add-orange" ).click(function() { order.items.push(orange ); console.log( "Orange Added" ); console.log("Updated order : ", order); }); 
+          $( "#add-lemon"  ).click(function() { order.items.push(lemon  ); console.log( "Lemon Added"  ); console.log("Updated order : ", order); }); 
+          $( "#add-lettuce").click(function() { order.items.push(lettuce); console.log( "Lettuce Added"); console.log("Updated order : ", order); }); 
+
+          $( "#sub-apple"  ).click(function() { removeFromArray( order.items, apple); console.log( "Apple Removed"  ); console.log("Updated order : ", order); }); 
+          $( "#sub-orange" ).click(function() { removeFromArray( order.items, apple); console.log( "Orange Removed" ); console.log("Updated order : ", order); }); 
+          $( "#sub-lemon"  ).click(function() { removeFromArray( order.items, apple); console.log( "Lemon Removed"  ); console.log("Updated order : ", order); }); 
+          $( "#sub-lettuce").click(function() { removeFromArray( order.items, apple); console.log( "Lettuce Removed"); console.log("Updated order : ", order); }); 
+
+
+
+          submitForm();
+
+         });
+
+         function removeFromArray(array, value) {
+              var idx = array.indexOf(value);
+              if (idx !== -1) { array.splice(idx, 1); } return array;
+          }
+
+          function addSum(){
+
+          }
+
+          function submitForm(finalJson){
+            var el = document.getElementById("submit");
+            el.addEventListener("click", function(event){
+              console.log("Before Form submit");
+
+              // AJAX Call Happens here
+              $.post("https://weg714x7oa.execute-api.us-east-2.amazonaws.com/dev/trans", JSON.stringify(
+
+                 {
+                    "phone": "347-599-3166",
+                    "items": [
+                        {"name": "product1", "price": "2.4"},
+                        { "name": "product1", "price": "2.4"}],
+                    "tax": "2.3",
+                    "amount": "2.4"
+                    }), function(res){
+                    console.log(res);
+                    });
+
+              console.log("After Form submit");
+            } , false);
+        }
+    </script>
+    
+    <div class="content">
+        <div class="container">
+            <h1 style="margin-top:50px;margin-bottom:50px;">DigiPay</h1>
+
+            <div class="accordion" id="accordion">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Product Info
+                      </button>
+                    </h5>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        
+                        <div class="row col-md-12">
+
+                            <div class="col-md-3">
+                                <div class="card" >
+
+                                        <div class="card-body">
+                                          <h5 class="card-title form-inline"><img class="card-img-top text-right" src="./assets/icons8-apple-48.png" alt="Apple Icon"> Apple</h5>
+                                         
+                                         <div class="form-inline"></div> 
+                                         <p class="card-text"> Product ID : 65278</p>
+                                         <p class="card-text"> Cost : 5$</p>
+
+                                          <button type="button" class="btn btn-outline-primary" id="sub-apple"><strong>  -  </strong></button>
+                                          <button type="button" class="btn btn-primary" id="add-apple"><strong>  +  </strong></button>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                      <div class="card" >
+
+                                            <div class="card-body">
+                                              <h5 class="card-title">   <img class="card-img-top" src="./assets/icons8-green-lettuce-64.png" alt="Green Lettuce">Lettuce</h5>
+                                              <p class="card-text"> Product ID : 52786</p>
+                                              <p class="card-text">Cost: 5$</p>
+                                              
+                                              <button type="button" class="btn btn-outline-primary" id="sub-lettuce"><strong>-</strong></button>
+                                              <button type="button" class="btn btn-primary" id="add-lettuce"><strong>+</strong></strong></button>
+                                            </div>
+                                          </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="card" >
+
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><img class="card-img-top" src="./assets/icons8-lemon-64.png" alt="Lemon">Lemon</h5>
+                                                    <p class="card-text"> Product ID : 27865</p>
+                                                    <p class="card-text">Cost: 5$</p>
+
+                                                    <button type="button" class="btn btn-outline-primary" id="sub-lemon"><strong>  -  </strong></button>
+                                                    <button type="button" class="btn btn-primary" id="add-lemon"><strong>  +  </strong></strong></button>
+                                                  </div>
+                                                </div>
+                                            </div>
+
+                                    <div class="col-md-3">
+                                        <div class="card" >
+
+                                                <div class="card-body">
+                                                <h5 class="card-title">  <img class="card-img-top" src="./assets/icons8-orange-64.png" alt="Orange">Orange</h5>
+                                                <p class="card-text"> Product ID : 78652</p>
+                                                <p class="card-text">Cost: 5$</p>
+
+                                                <button type="button" class="btn btn-outline-primary" id="sub-orange"><strong>  -  </strong></button>
+                                                <button type="button" class="btn btn-primary" id="add-orange"><strong>  +  </strong></button>                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                        </div>
+
+
+                    </div>
+                  </div>
+                </div>                
+                <div class="card">
+                  <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Customer Info
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                      <form id="digipay-form">
+                      <div class="row">
+                            <div class="col">
+                            <input type="text" required pattern='^\+?\d{0,10}' title="10 digit numerical entry" class="form-control" placeholder="Customer Phone #">
+                            </div>
+                            <div class="col col-md-2">
+                                <input type="text" disabled class="form-control" placeholder="100">
+                                </div>
+                            <div class="col text-center">
+                              
+                                <button class="btn btn-primary" id="submit" > Send Confirmation</button>
+                              
+                            </div>
+                        </div>
+                        </form>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+    </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  </body>
+</html>
