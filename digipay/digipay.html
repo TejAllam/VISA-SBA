@@ -7,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="./assets/jquery.js"></script>
 
     <title>DigiPay - Merchant Screen</title>
   </head>
@@ -28,59 +28,74 @@
           const lettuce = { "product": "lettuce", "price": 5 };
 
           // Final Order JSON
-          var order = { "phone": "", "items": [], "balance": "100" };
+          var order = { "phone": "19144712207", "items": [], "amount": "0" };
 
-        $(function() {
+          $(document).ready(function() {
 
-          var item = {"product": "", "price": ""};
+            addSum(order);  // Auto Sum functionality
+            
 
-          $( "#add-apple"  ).click(function() { order.items.push(apple  ); console.log( "Apple Added"  ); console.log("Updated order : ", order); }); 
-          $( "#add-orange" ).click(function() { order.items.push(orange ); console.log( "Orange Added" ); console.log("Updated order : ", order); }); 
-          $( "#add-lemon"  ).click(function() { order.items.push(lemon  ); console.log( "Lemon Added"  ); console.log("Updated order : ", order); }); 
-          $( "#add-lettuce").click(function() { order.items.push(lettuce); console.log( "Lettuce Added"); console.log("Updated order : ", order); }); 
+            // var item = {"product": "", "price": ""};
+            $( "#add-apple"  ).click(function() { order.items.push(apple  ); console.log( "Apple Added"  ); console.log("Updated order : ", order); addSum(order);}); 
+            $( "#add-orange" ).click(function() { order.items.push(orange ); console.log( "Orange Added" ); console.log("Updated order : ", order); addSum(order);}); 
+            $( "#add-lemon"  ).click(function() { order.items.push(lemon  ); console.log( "Lemon Added"  ); console.log("Updated order : ", order); addSum(order);}); 
+            $( "#add-lettuce").click(function() { order.items.push(lettuce); console.log( "Lettuce Added"); console.log("Updated order : ", order); addSum(order);}); 
 
-          $( "#sub-apple"  ).click(function() { removeFromArray( order.items, apple); console.log( "Apple Removed"  ); console.log("Updated order : ", order); }); 
-          $( "#sub-orange" ).click(function() { removeFromArray( order.items, apple); console.log( "Orange Removed" ); console.log("Updated order : ", order); }); 
-          $( "#sub-lemon"  ).click(function() { removeFromArray( order.items, apple); console.log( "Lemon Removed"  ); console.log("Updated order : ", order); }); 
-          $( "#sub-lettuce").click(function() { removeFromArray( order.items, apple); console.log( "Lettuce Removed"); console.log("Updated order : ", order); }); 
+            $( "#sub-apple"  ).click(function() { removeFromArray( order.items, apple); console.log( "Apple Removed"  ); console.log("Updated order : ", order);  }); 
+            $( "#sub-orange" ).click(function() { removeFromArray( order.items, apple); console.log( "Orange Removed" ); console.log("Updated order : ", order);  }); 
+            $( "#sub-lemon"  ).click(function() { removeFromArray( order.items, apple); console.log( "Lemon Removed"  ); console.log("Updated order : ", order);  }); 
+            $( "#sub-lettuce").click(function() { removeFromArray( order.items, apple); console.log( "Lettuce Removed"); console.log("Updated order : ", order);  }); 
 
+            $( "#form-submit").click(function(event) {
 
-
-          submitForm();
-
+              postRequest(order);
+              console.log("Submit Completed");
+              event.preventDefault();
+          });  
          });
 
+        function postRequest(json){
+  
+            // POST Request  
+            var xhr = new XMLHttpRequest();
+            var responseText = "";
+            xhr.open("POST", "https://weg714x7oa.execute-api.us-east-2.amazonaws.com/dev/trans");
+            xhr.onreadystatechange = function(res){ 
+              console.log("res : ",res.target); 
+//              responseText = JSON.parse(res.target.responseText);
+//             console.log("responseText : ", responseText.transactionId);
+
+            }
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(json));
+            
+            $('#transaction').val("Here");
+            $('#modal-success').modal({
+              keyboard: false,
+              focus: true
+            });
+        }
+
+        // Function to remove entry from array
          function removeFromArray(array, value) {
               var idx = array.indexOf(value);
               if (idx !== -1) { array.splice(idx, 1); } return array;
           }
 
-          function addSum(){
 
+        // Function to add product cost    
+          function addSum(obj){
+
+            var list = obj.items;
+            var total = 0;
+            for (i = 0; i < list.length; i++) {  //loop through the array
+              total += list[i].price;
+            }
+            $('#total-cost').val(total); // Update the value
+            obj.amount = total; // Update JSON
+            return this.obj;
           }
 
-          function submitForm(finalJson){
-            var el = document.getElementById("submit");
-            el.addEventListener("click", function(event){
-              console.log("Before Form submit");
-
-              // AJAX Call Happens here
-              $.post("https://weg714x7oa.execute-api.us-east-2.amazonaws.com/dev/trans", JSON.stringify(
-
-                 {
-                    "phone": "347-599-3166",
-                    "items": [
-                        {"name": "product1", "price": "2.4"},
-                        { "name": "product1", "price": "2.4"}],
-                    "tax": "2.3",
-                    "amount": "2.4"
-                    }), function(res){
-                    console.log(res);
-                    });
-
-              console.log("After Form submit");
-            } , false);
-        }
     </script>
     
     <div class="content">
@@ -107,13 +122,13 @@
 
                                         <div class="card-body">
                                           <h5 class="card-title form-inline"><img class="card-img-top text-right" src="./assets/icons8-apple-48.png" alt="Apple Icon"> Apple</h5>
-                                         
-                                         <div class="form-inline"></div> 
-                                         <p class="card-text"> Product ID : 65278</p>
-                                         <p class="card-text"> Cost : 5$</p>
+                                          <p class="card-text"> Product ID : #65278</p>
+                                          <p class="card-text">Cost: 5$</p>
 
-                                          <button type="button" class="btn btn-outline-primary" id="sub-apple"><strong>  -  </strong></button>
-                                          <button type="button" class="btn btn-primary" id="add-apple"><strong>  +  </strong></button>
+                                        <div class="text-center">
+                                          <button type="button" class="btn btn-lg btn-outline-primary" id="sub-apple"><strong>  -  </strong></button>
+                                          <button type="button" class="btn btn-lg btn-primary" id="add-apple"><strong>  +  </strong></button>
+                                        </div>  
                                         </div>
                                       </div>
                                     </div>
@@ -126,8 +141,10 @@
                                               <p class="card-text"> Product ID : 52786</p>
                                               <p class="card-text">Cost: 5$</p>
                                               
-                                              <button type="button" class="btn btn-outline-primary" id="sub-lettuce"><strong>-</strong></button>
-                                              <button type="button" class="btn btn-primary" id="add-lettuce"><strong>+</strong></strong></button>
+                                              <div class="text-center">
+                                              <button type="button" class="btn btn-lg btn-outline-primary" id="sub-lettuce"><strong>-</strong></button>
+                                              <button type="button" class="btn btn-lg btn-primary" id="add-lettuce"><strong>+</strong></button>
+                                              </div>
                                             </div>
                                           </div>
                                     </div>
@@ -140,8 +157,10 @@
                                                     <p class="card-text"> Product ID : 27865</p>
                                                     <p class="card-text">Cost: 5$</p>
 
-                                                    <button type="button" class="btn btn-outline-primary" id="sub-lemon"><strong>  -  </strong></button>
-                                                    <button type="button" class="btn btn-primary" id="add-lemon"><strong>  +  </strong></strong></button>
+                                                    <div class="text-center">
+                                                    <button type="button" class="btn-lg btn btn-outline-primary" id="sub-lemon"><strong>  -  </strong></button>
+                                                    <button type="button" class="btn-lg btn btn-primary" id="add-lemon"><strong>  +  </strong></button>
+                                                    </div>
                                                   </div>
                                                 </div>
                                             </div>
@@ -154,8 +173,10 @@
                                                 <p class="card-text"> Product ID : 78652</p>
                                                 <p class="card-text">Cost: 5$</p>
 
-                                                <button type="button" class="btn btn-outline-primary" id="sub-orange"><strong>  -  </strong></button>
-                                                <button type="button" class="btn btn-primary" id="add-orange"><strong>  +  </strong></button>                                                
+                                                <div class="text-center">
+                                                <button type="button" class="btn btn-lg btn-outline-primary" id="sub-orange"><strong>  -  </strong></button>
+                                                <button type="button" class="btn btn-lg btn-primary" id="add-orange"><strong>  +  </strong></button>                                                
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,17 +196,17 @@
                   </div>
                   <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                     <div class="card-body">
-                      <form id="digipay-form">
+                      <form >
                       <div class="row">
                             <div class="col">
-                            <input type="text" required pattern='^\+?\d{0,10}' title="10 digit numerical entry" class="form-control" placeholder="Customer Phone #">
+                            <input type="text" value="19144712207" required pattern='^\+?\d{0,3}' title="10 digit numerical entry" class="form-control" >
                             </div>
                             <div class="col col-md-2">
-                                <input type="text" disabled class="form-control" placeholder="100">
+                                <input type="text" disabled class="form-control" value="0" id="total-cost">
                                 </div>
                             <div class="col text-center">
                               
-                                <button class="btn btn-primary" id="submit" > Send Confirmation</button>
+                                <button class="btn btn-primary" id="form-submit" > Send Confirmation</button>
                               
                             </div>
                         </div>
@@ -195,11 +216,31 @@
                   </div>
                 </div>
               </div>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="modal-success" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body text-center">
+                       <span > Transaction Pending <br><span class="text-muted" id="transaction">ID: #</span></p>
+                      </div>
+                      <div class="modal-footer text-center"><span class="text-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
 
           </div>
     </div>
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
