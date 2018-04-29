@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="DigiLink Login">
+    <meta name="author" content="tejallam">
+
+    <title>DigiLink Signin </title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="./assets/jquery.js"></script>
+    <script type="text/javascript"  src="https://jstest.authorize.net/v1/Accept.js" charset="utf-8"></script>
+
+    <style>
+            html, body {
+              height: 100%;
+            }
+            
+            body {
+              display: -ms-flexbox;
+              display: flex;
+              -ms-flex-align: center;
+              align-items: center;
+              padding-top: 40px;
+              padding-bottom: 40px;
+              background-color: #f5f5f5;
+            }
+            
+            .form-signin {
+              width: 100%;
+              max-width: 330px;
+              padding: 15px;
+              margin: auto;
+            }
+            .form-signin .checkbox {
+              font-weight: 400;
+            }
+            .form-signin .form-control {
+              position: relative;
+              box-sizing: border-box;
+              height: auto;
+              padding: 10px;
+              font-size: 16px;
+            }
+            .form-signin .form-control:focus {
+              z-index: 2;
+            }
+            .form-signin input[type="email"] {
+              margin-bottom: -1px;
+              border-bottom-right-radius: 0;
+              border-bottom-left-radius: 0;
+            }
+            .form-signin input[type="password"] {
+              margin-bottom: 10px;
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+            }
+            </style>
+  </head>
+
+  <script>
+      $('#sign-up-form').click(function(event){
+          console.log("Form Submit Capture");
+          event.preventDefault();
+      });
+  </script>
+  
+  <body class="text-center">
+
+        <form id="paymentForm" class="form-signin"
+            method="POST"  action="https://YourServer/PathToExistingPaymentProcessingScript">
+        
+        
+        <input value="19144712207" required="" pattern="^\+?\d{0,3}" title="10 digit numerical entry" class="form-control" type="text"><br>
+
+                    
+        <label for="cardNumber" class="sr-only">Card Number</label>
+        <input class="form-control" type="text" name="cardNumber" id="cardNumber" placeholder="Card Number"/>
+        <div class="form-row">
+            <div class="col">
+                <label for="expMonth" class="sr-only">Expiration Month</label>
+                <input class="form-control" type="text" name="expMonth" id="expMonth" placeholder="Expiration Month"/>
+            </div>
+            <div class="col">
+                <label for="expYear" class="sr-only">Expiration Year</label>
+                <input class="form-control" type="text" name="expYear" id="expYear" placeholder="Expiration Year"/>
+            </div>
+        </div>
+        <label for="cardCode" class="sr-only">Security Code</label>
+        <input class="form-control" type="text" name="cardCode" id="cardCode" placeholder="Security Code"/>
+
+        <input type="hidden" name="dataValue" id="dataValue" />
+        <input type="hidden" name="dataDescriptor" id="dataDescriptor" />
+
+        <br><br>
+        <button class="btn btn-primary" type="submit"  id="sign-up-form">Sign Up</button>
+    </form>
+
+  </body>
+</html>
